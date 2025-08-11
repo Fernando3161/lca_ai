@@ -19,15 +19,18 @@ for file in os.listdir(DIR):
             docs.append(text)
 
 # ---------- 2) Create embeddings ----------
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
+#embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_kwargs={"device": "cpu"}
+)
 # ---------- 3) Build FAISS index ----------
 db = FAISS.from_texts(docs, embeddings)
 
 # ---------- 4) Local LLM via Ollama ----------
 # Make sure Ollama is running: `ollama serve` (usually runs automatically)
 # And that you've pulled your model: `ollama pull mistral`
-llm = Ollama(model="mistral", temperature=0.2)
+llm = Ollama(model="qwen3:0.6b", temperature=0.2)
 
 # ---------- 5) RetrievalQA chain ----------
 qa = RetrievalQA.from_chain_type(
