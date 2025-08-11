@@ -1,0 +1,1 @@
+#pip install ollama langchain sentence-transformers faiss-cpu gradio
